@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import time
+
 examples_part1 = {
     '>': 2,
     '^>v<': 4,
@@ -31,8 +33,9 @@ def solve_part1(ipt):
     locations = [current]
     for direction in ipt:
         current = moveSanta(current, direction)
-        locations.append(current)
-    return len(set(locations))
+        if current not in locations:
+            locations.append(current)
+    return len(locations)
 
 def solve_part2(ipt):
     currentSanta = (0,0)
@@ -49,9 +52,16 @@ def solve_part2(ipt):
     return len(set(locations))
 
 def test(name, d, func):
-    for key, val in d.items():
-        assert func(key) == val, 'Problem with ' + key
-    print("Test " + name + ": All success.")
+    print("==================")
+    print("Test all the examples for " + name)
+    for i, (key, val) in enumerate(d.items()):
+        start = time.time()
+        success = func(key) == val
+        time_spent = time.time() - start
+        if success:
+            print("\tOK: Test " + str(i) + " in: " + str(time_spent))
+        else:
+            print("\tFAILED: Test " + i + " (key " + key + ")")
 
 
 if __name__ == '__main__':
